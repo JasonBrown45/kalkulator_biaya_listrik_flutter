@@ -63,5 +63,6 @@ class CalculatorState extends ChangeNotifier {
 
   void onChangedDaya(String? newValue) {
     selectedDaya = newValue;
+    notifyListeners();
   }
 }
