@@ -60,4 +60,8 @@ class CalculatorState extends ChangeNotifier {
     indexGolongan = storage.golongan.indexOf(selectedGolongan!);
     notifyListeners();
   }
+
+  void onChangedDaya(String? newValue) {
+    selectedDaya = newValue;
+  }
 }

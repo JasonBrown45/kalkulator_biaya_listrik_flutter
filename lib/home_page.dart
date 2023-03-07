@@ -92,7 +92,7 @@ class HomePage extends StatelessWidget {
                       );
                     }).toList(),
                     onChanged: (newValue) {
-                      appState.selectedDaya = newValue;
+                      appState.onChangedDaya(newValue!);
                     }),
               ),
               Container(
