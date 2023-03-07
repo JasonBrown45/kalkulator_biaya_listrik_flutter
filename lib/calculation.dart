@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:kalkulator_biaya_listrik/list_storage.dart';
 
 class CalculatorState extends ChangeNotifier {
   String jam = '0';
@@ -15,42 +16,22 @@ class CalculatorState extends ChangeNotifier {
   double totalBiayaBulan = 0;
   double totalBiayaTahun = 0;
 
-  final List<String> golongan = ['Rumah Tangga', 'Bisnis'];
-  final List<String> dayaRumahTangga = [
-    'R1/TR (0 - 450 VA) (Subsidi)',
-    'R1/TR (451 - 900 VA) (Subsidi)',
-    'R1/TR (451 - 900 VA) (Non-Subsidi)',
-    'R1/TR (901 - 1300 VA)',
-    'R1/TR (1301 - 2200 VA)',
-    'R2/TR (2201 - 5500 VA)',
-    'R3/TR (>5500 VA)'
-  ];
-  final List<String> dayaBisnis = [
-    'B1/TR (0 - 450 VA) (Subsidi)',
-    'B1/TR (451 - 900 VA) (Subsidi)',
-    'B1/TR (451 - 900 VA) (Non-Subsidi)',
-    'B1/TR (901 - 1300 VA)',
-    'B2/TR (5501 VA - 200 kVA)',
-    'B3/TM (>200 kVA)'
-  ];
-  static const biayaKWH = [
-    [169, 274, 1352, 1444.70, 1444.70, 1444.70, 1444.70],
-    [254, 420, 966, 1100, 1444.70, 1114.74]
-  ];
+  ListStorage storage = ListStorage();
 
   late Map<String, List<String>> daya = {
-    'Rumah Tangga': dayaRumahTangga,
-    'Bisnis': dayaBisnis,
+    'Rumah Tangga': storage.dayaRumahTangga,
+    'Bisnis': storage.dayaBisnis,
   };
 
   calculateElectricityBill() {
     if (indexGolongan == 0) {
-      indexDaya = dayaRumahTangga.indexOf(selectedDaya!);
+      indexDaya = storage.dayaRumahTangga.indexOf(selectedDaya!);
     } else if (indexGolongan == 1) {
-      indexDaya = dayaBisnis.indexOf(selectedDaya!);
+      indexDaya = storage.dayaBisnis.indexOf(selectedDaya!);
     }
     double totalWatt = (wattNum * jamNum);
-    totalBiayaHarian = totalWatt / 1000 * biayaKWH[indexGolongan][indexDaya];
+    totalBiayaHarian =
+        totalWatt / 1000 * storage.biayaKWH[indexGolongan][indexDaya];
     totalBiayaBulan = totalBiayaHarian * 30;
     totalBiayaTahun = totalBiayaBulan * 12;
     notifyListeners();
@@ -76,7 +57,7 @@ class CalculatorState extends ChangeNotifier {
   void onChangeGolongan(String? newValue) {
     selectedDaya = null;
     selectedGolongan = newValue!;
-    indexGolongan = golongan.indexOf(selectedGolongan!);
+    indexGolongan = storage.golongan.indexOf(selectedGolongan!);
     notifyListeners();
   }
 }
